@@ -1,63 +1,67 @@
 import React, {useEffect, useRef, useState} from 'react';
 
 const JumpingCircle = () => {
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(5);
   const canvasRef = useRef();
-  const perimetrBall = {x: 200, y: 25};
 
-  let velo = value, corner = 10, rad = 20;
+  const x = 100;
+  let y = 200, dy = value, canvas, context, timer;
 
-  let ball = {x: perimetrBall.x, y: perimetrBall.y};
-  let moveY = Math.sin(Math.PI / 180 * corner) * velo;
+  const draw = () => {
+    canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    } else {
+      context = canvas.getContext('2d');
+      context.clearRect(0, 0, 400, 300);
 
-  let timer;
+      context.beginPath();
+      context.fillStyle = "#0000ff";
+      context.arc(x, y, 20, 0, Math.PI * 2, true);
+      context.fill();
+      context.closePath();
 
-  const drawMe = () => {
-    const canvas = canvasRef.current;
-    const contextCanvas = canvas.getContext('2d');
+      if (y < 0 || y > 300) dy = -dy;
 
-    contextCanvas.clearRect(0, 0, 400, 300);
-
-    if (ball.y > canvas.height - rad || ball.y < rad) moveY = -moveY;
-
-    ball.y += moveY;
-
-    contextCanvas.beginPath();
-    contextCanvas.fillStyle = 'blue';
-    contextCanvas.arc(ball.x, ball.y, rad, 0, Math.PI * 2, false);
-    contextCanvas.fill();
-    contextCanvas.closePath();
-
-    timer = requestAnimationFrame(drawMe)
+      y += dy;
+    }
   };
 
   const start = () => {
-    requestAnimationFrame(drawMe);
+    timer = setInterval(draw, 10);
   };
 
   const stop = () => {
-    cancelAnimationFrame(timer);
+    clearInterval(timer);
   };
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+  useEffect(() => {
+    timer = setInterval(draw, 10);
+    return () => stop();
+  });
 
-  useEffect(start);
+  useEffect(() => {
+    return () => start();
+  });
 
-  useEffect(stop);
+  useEffect(() => {
+    setValue(value);
+  }, [value]);
+
+  useEffect(() => {
+    return () => stop();
+  });
 
   return (
     <div style={{marginTop: '70px'}}>
       <canvas ref={canvasRef} width={400} height={300} style={{border: '5px solid blue'}}/>
       <button onClick={start}>Start</button>
       <button onClick={stop}>Stop</button>
-      <input type="range"
-             min={0}
-             max={100}
-             step={5}
-             onChange={handleChange}
-             value={value}/>
+      <input type="range" min={5} max={20} step={5}
+             onChange={(event) =>
+               setValue(parseInt(event.target.value))}
+             value={value}
+      />
     </div>
   )
 };
