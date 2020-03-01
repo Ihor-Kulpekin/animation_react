@@ -8,20 +8,15 @@ const getBaseItemStyle = (isActive) => ({
   outline: 'none',
   border: '1px solid',
   cursor: 'move',
-  display: 'inline-block',
-  background: isActive ? '#27aceb' : '#bfe7f9',
-  color: isActive ? '#fff' : '#1494d0',
-  borderColor: isActive ? '#27aceb' : '#fff'
+  background: '#3f51b5',
+  color:'#fff',
+  borderColor: '#fff',
+  borderRadius:5
 });
 
 const SortableItemUI = (props) => {
-  const {isDisabled, isActive, style, attributes, dataItem, forwardRef} = props;
-  const classNames = ['col-xs-6 col-sm-3'];
+  const {isActive, style, attributes, dataItem, forwardRef} = props;
 
-  if (isDisabled) {
-    classNames.push('k-state-disabled');
-  }
-  
   const [dataText, setDataText] = useState(dataItem.text);
 
   const handleChangeText = (event) => {
@@ -33,7 +28,7 @@ const SortableItemUI = (props) => {
     if (dataText) {
       setDataText(JSON.parse(dataText))
     }
-  },[dataItem.text]);
+  }, [dataItem.text]);
 
   useEffect(() => {
     localStorage.setItem(dataItem.text,
@@ -41,7 +36,7 @@ const SortableItemUI = (props) => {
   });
 
   return (
-    <div className="example-config">
+    <div>
       <input
         ref={forwardRef}
         {...attributes}
@@ -49,7 +44,6 @@ const SortableItemUI = (props) => {
           ...getBaseItemStyle(isActive),
           ...style
         }}
-        className={classNames.join(' ')}
         value={dataText}
         onChange={handleChangeText}/>
     </div>

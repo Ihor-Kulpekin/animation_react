@@ -1,0 +1,28 @@
+.boxes {
+  width: content-box;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  height: content-box;
+}
+
+.box {
+  width: content-box;
+  height: content-box;
+  border: solid 1px #e7ebbd;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  flex-direction: column;
+  /*box-shadow: 0.4em 0.4em 10px rgba(122, 122, 122, 0.5);*/
+}
+
+.info {
+  width: content-box;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}

@@ -7,7 +7,7 @@ import DataContainer from './ListNumbers/DataContainer';
 
 const MainContent = ({value, arrayIndex}) => {
   return (
-    <>
+    <div style={{marginTop:45}}>
       <TabPanel value={value} index={arrayIndex[0]}>
         <DataContainer/>
       </TabPanel>
@@ -17,7 +17,7 @@ const MainContent = ({value, arrayIndex}) => {
       <TabPanel value={value} index={arrayIndex[2]}>
         <JumpingCircle/>
       </TabPanel>
-    </>
+    </div>
   )
 };
 
