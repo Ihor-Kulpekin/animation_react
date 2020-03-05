@@ -1,10 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
+
 import 'mdbreact/dist/css/mdb.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Slider} from "react-md";
 
 const JumpingCircle = () => {
   const [value, setValue] = useState(5);
+  const [isClicked,setIsClicked] = useState(false);
   const canvasRef = useRef();
   const x = 200;
   let y = 200, dy = value, canvas, context, timer;
@@ -37,7 +38,9 @@ const JumpingCircle = () => {
   };
 
   useEffect(() => {
-    start();
+    if(isClicked===false){
+      start();
+    }
     return () => stop();
   });
 
@@ -45,17 +48,20 @@ const JumpingCircle = () => {
     <div style={{marginTop: '70px',marginLeft:420}}>
       <canvas ref={canvasRef} width={400} height={300} style={{border: '5px solid blue'}}/>
       <div>
-        <button onClick={start} className="btn btn-primary">Start
-        </button>
-        <button onClick={stop} className="btn btn-primary">Stop
-        </button>
+        <button onClick={()=>{
+          start();
+          setIsClicked(!isClicked);
+        }} className="btn btn-primary">Start</button>
+        <button onClick={()=>{
+          stop();
+          setIsClicked(!isClicked);
+        }} className="btn btn-primary">Stop</button>
         <input type="range" min={5} max={20} step={5}
                onChange={(event) => {
                  setValue(parseInt(event.target.value))
                }}
                style={{marginLeft:10,width:230}}
                value={value}
-               className="input-range"
         />
       </div>
     </div>
