@@ -5,10 +5,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const JumpingCircle = () => {
   const [value, setValue] = useState(5);
-  const [isClicked,setIsClicked] = useState(false);
+  const [isClicked,setIsClicked] = useState(true);
   const canvasRef = useRef();
+  const timer = useRef(0);
   const x = 200;
-  let y = 200, dy = value, canvas, context, timer;
+  let y = 200, dy = value, canvas, context;
 
   const draw = () => {
     canvas = canvasRef.current;
@@ -30,17 +31,24 @@ const JumpingCircle = () => {
   };
 
   const start = () => {
-    timer = setInterval(draw, 10);
+    if(timer.current!==0)return;
+
+    timer.current = setInterval(draw, 10);
   };
 
   const stop = () => {
-    clearInterval(timer);
+    if(timer.current===0)return;
+
+    clearInterval(timer.current);
+
+    timer.current = 0;
   };
 
   useEffect(() => {
-    if(isClicked===false){
+    if(timer.current===0 && isClicked===false){
       start();
     }
+
     return () => stop();
   });
 
@@ -50,11 +58,11 @@ const JumpingCircle = () => {
       <div>
         <button onClick={()=>{
           start();
-          setIsClicked(!isClicked);
+          setIsClicked(false);
         }} className="btn btn-primary">Start</button>
         <button onClick={()=>{
           stop();
-          setIsClicked(!isClicked);
+          setIsClicked(true);
         }} className="btn btn-primary">Stop</button>
         <input type="range" min={5} max={20} step={5}
                onChange={(event) => {
