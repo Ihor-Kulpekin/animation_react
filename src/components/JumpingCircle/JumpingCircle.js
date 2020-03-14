@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const JumpingCircle = () => {
   const [value, setValue] = useState(5);
-  const [isClicked,setIsClicked] = useState(true);
+  const [isClicked, setIsClicked] = useState(true);
   const canvasRef = useRef();
   const timer = useRef(0);
   const x = 200;
@@ -28,47 +28,44 @@ const JumpingCircle = () => {
     if (y < 0 || y > 300) dy = -dy;
 
     y += dy;
+    timer.current = requestAnimationFrame(draw)
   };
 
   const start = () => {
-    if(timer.current!==0)return;
+    if (timer.current !== 0) return;
 
-    timer.current = setInterval(draw, 10);
+    timer.current = requestAnimationFrame(draw);
   };
 
   const stop = () => {
-    if(timer.current===0)return;
+    if (timer.current === 0) return;
 
-    clearInterval(timer.current);
+    cancelAnimationFrame(timer.current);
 
     timer.current = 0;
   };
 
   useEffect(() => {
-    if(timer.current===0 && isClicked===false){
+    if (timer.current === 0 && isClicked === false) {
       start();
     }
 
-    return () => stop();
+    return stop;
   });
 
   return (
-    <div style={{marginTop: '70px',marginLeft:420}}>
+    <div style={{marginTop: '70px', marginLeft: 420}}>
       <canvas ref={canvasRef} width={400} height={300} style={{border: '5px solid blue'}}/>
       <div>
-        <button onClick={()=>{
-          start();
-          setIsClicked(false);
-        }} className="btn btn-primary">Start</button>
-        <button onClick={()=>{
-          stop();
-          setIsClicked(true);
-        }} className="btn btn-primary">Stop</button>
+        <button onClick={() => {
+          isClicked === false ? stop() : start();
+          setIsClicked(!isClicked);
+        }} className="btn btn-primary">{isClicked === true ? 'Start' : 'Stop'}</button>
         <input type="range" min={5} max={20} step={5}
                onChange={(event) => {
                  setValue(parseInt(event.target.value))
                }}
-               style={{marginLeft:10,width:230}}
+               style={{marginLeft: 10, width: 230}}
                value={value}
         />
       </div>
